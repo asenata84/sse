@@ -16,10 +16,11 @@ app.get("/events", function (req, res) {
   let i = 1;
 
   const interval = setInterval(() => {
-    res.write(`data: Event ${i}\n\n`);
-    i++;
+    res.write(`id: ${i}\ndata: Event ${i}\n\n`);
 
     console.log("%c =========== sending >>", "color:#669851;font-size:12px", i);
+
+    i++;
   }, 2000);
 
   const removeInterval = () => {

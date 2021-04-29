@@ -2,52 +2,46 @@
 
 <head>
   <script>
-
     if (window.EventSource) {
-      try {
-        startEvents = () => {
-          const events = new EventSource('http://localhost:3000/events')
+      startEvents = () => {
+        const events = new EventSource('http://localhost:3000/events')
 
-          events.onmessage = (e) => {
+        events.onmessage = (e) => {
 
-            console.log('%c =========== e >>', 'color:#669851;font-size:12px', e);
+          console.log('%c =========== e >>', 'color:#669851;font-size:12px', e);
 
-            if (e?.data) {
-              document.getElementById('data').innerHTML = e.data
-            }
+          if (e?.data) {
+            document.getElementById('data').innerHTML = e.data
           }
-
-          events.onopen = () => {
-            document.getElementById('state').innerHTML = "Connected"
-          }
-
-          events.onerror = (e) => {
-            console.log('%c =========== ERROR >>', 'color:#669851;font-size:12px', e);
-
-            const id_state = document.getElementById('state')
-
-            if (e.eventPhase == EventSource.CLOSED) {
-              id_state.innerHTML = "Disconnected"
-            }
-
-            if (e.target.readyState == EventSource.CLOSED) {
-              id_state.innerHTML = "Disconnected"
-            } else if (e.target.readyState == EventSource.CONNECTING) {
-              id_state.innerHTML = "Connecting ..."
-            }
-          }
-
-          return events
         }
 
-        const _events = startEvents()
-
-        stopEvents = () => {
-          _events.close();
+        events.onopen = () => {
+          document.getElementById('state').innerHTML = "Connected"
         }
 
-      } catch (error) {
-        console.log('%c =========== error >>', 'color:#669851;font-size:12px', error);
+        events.onerror = (e) => {
+          console.log('%c =========== ERROR >>', 'color:#669851;font-size:12px', e);
+
+          const id_state = document.getElementById('state')
+
+          if (e.eventPhase == EventSource.CLOSED) {
+            id_state.innerHTML = "Disconnected"
+          }
+
+          if (e.target.readyState == EventSource.CLOSED) {
+            id_state.innerHTML = "Disconnected"
+          } else if (e.target.readyState == EventSource.CONNECTING) {
+            id_state.innerHTML = "Connecting ..."
+          }
+        }
+
+        return events
+      }
+
+      const sentEvents = startEvents()
+
+      stopEvents = () => {
+        sentEvents.close();
       }
 
     } else {
