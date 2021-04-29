@@ -1,25 +1,37 @@
-const express = require('express')
-const cors = require('cors')
-const app = express()
+const express = require("express");
+const cors = require("cors");
+const app = express();
 
-app.use(express.static('public'))
-app.use(cors())
+app.use(express.static("public"));
+app.use(cors());
 
-app.get('/countdown', function(req, res) {
+app.get("/events", function (req, res) {
+  req.on("close", () => {
+    clearInterval(interval);
+    res.end();
+  });
+
+  req.on("error", (err) => {
+    console.log("%c =========== err >>", "color:#669851;font-size:12px", err);
+    clearInterval(interval);
+    res.end();
+  });
+
   res.writeHead(200, {
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive'
-  })
-  countdown(res, 10)
-})
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    Connection: "keep-alive",
+  });
 
-function countdown(res, count) {
-  res.write("data: " + count + "\n\n")
-  if (count)
-    setTimeout(() => countdown(res, count-1), 1000)
-  else
-    res.end()
-}
+  let i = 1;
 
-app.listen(3000, () => console.log('SSE app listening on port 3000!'))
+  const interval = setInterval(() => {
+    res.write(`data: Event ${i}\n\n`);
+
+    console.log("%c =========== sending >>", "color:#669851;font-size:12px", i);
+
+    i++;
+  }, 2000);
+});
+
+app.listen(3000, () => console.log("SSE app listening on port 3000!"));
