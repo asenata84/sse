@@ -4,14 +4,14 @@
   <script>
     if (window.EventSource) {
       startEvents = () => {
-        const events = new EventSource('http://localhost:3000/events')
+        const events = new EventSource('http://localhost:3002/events')
 
         events.onmessage = (e) => {
 
           console.log('%c =========== e >>', 'color:#669851;font-size:12px', e);
 
           if (e?.data) {
-            document.getElementById('data').innerHTML = e.data
+            document.getElementById('data').innerHTML = JSON.parse(e.data)
           }
         }
 

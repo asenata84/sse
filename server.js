@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-
+const port = 3002;
 app.use(express.static("public"));
 app.use(cors());
 
@@ -16,7 +16,9 @@ app.get("/events", function (req, res) {
   let i = 1;
 
   const interval = setInterval(() => {
-    res.write(`id: ${i}\ndata: Event ${i}\n\n`);
+    const data = `Event ${i}`;
+
+    res.write(`id: ${i}\ndata: ${JSON.stringify(data)}\n\n`);
 
     console.log("%c =========== sending >>", "color:#669851;font-size:12px", i);
 
@@ -38,4 +40,4 @@ app.get("/events", function (req, res) {
   });
 });
 
-app.listen(3000, () => console.log("SSE app listening on port 3000!"));
+app.listen(port, () => console.log(`SSE app listening on port ${port}!`));
